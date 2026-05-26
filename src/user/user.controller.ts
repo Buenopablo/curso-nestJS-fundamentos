@@ -12,23 +12,26 @@ import {
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
+  constructor(private readonly userService: UserService) {}
+
   @Post()
-  async create(@Body() body: CreateUserDTO) {
+  async create(@Body() { email, name, password }: CreateUserDTO) {
     // console.log(body);
-    return { body };
+    return this.userService.create({ email, name, password });
   }
 
   @Get()
   async list() {
-    return { users: [] };
+    return this.userService.listAll();
   }
 
   @Get('/:id')
   async readOne(@Param('id', ParseIntPipe) id) {
-    return { user: {}, id };
+    return this.userService.getById(id);
   }
 
   @Put('/:id')

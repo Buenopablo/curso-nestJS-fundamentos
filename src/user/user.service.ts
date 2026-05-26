@@ -16,4 +16,14 @@ export class UserService {
     });
     return user;
   }
+
+  async listAll() {
+    return this.prisma.users.findMany();
+  }
+
+  async getById(id: number) {
+    return this.prisma.users.findUnique({
+      where: { id },
+    });
+  }
 }
