@@ -20,7 +20,6 @@ export class UserController {
 
   @Post()
   async create(@Body() { email, name, password }: CreateUserDTO) {
-    // console.log(body);
     return this.userService.create({ email, name, password });
   }
 
@@ -35,28 +34,20 @@ export class UserController {
   }
 
   @Put('/:id')
-  async update(@Body() body: UpdatePutUserDTO, @Param('id', ParseIntPipe) id) {
-    return {
-      method: 'put',
-      body,
-      id,
-    };
+  async update(@Body() data: UpdatePutUserDTO, @Param('id', ParseIntPipe) id) {
+    return this.userService.update(id, data);
   }
 
   @Patch('/:id')
   async updatePartial(
-    @Body() body: UpdatePatchUserDTO,
+    @Body() data: UpdatePatchUserDTO,
     @Param('id', ParseIntPipe) id,
   ) {
-    return {
-      method: 'patch',
-      body,
-      id,
-    };
+    return this.userService.updatePartial(id, data);
   }
 
   @Delete('/:id')
   async delete(@Param('id', ParseIntPipe) id) {
-    return { id };
+    return this.userService.delete(id);
   }
 }
