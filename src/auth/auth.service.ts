@@ -17,7 +17,7 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async createToken(user: users) {
+  createToken(user: users) {
     return {
       accessToken: this.JWTService.sign(
         {
@@ -34,18 +34,20 @@ export class AuthService {
     };
   }
 
-  async checkToken(token: string) {
+  checkToken(token: string) {
     try {
       const data = this.JWTService.verify(token, {
         audience: 'users',
         issuer: 'login',
       });
+
+      return data;
     } catch (error) {
       throw new BadRequestException(error);
     }
   }
 
-  async isValidToken(token: string) {
+  isValidToken(token: string) {
     try {
       this.checkToken(token);
       return true;
