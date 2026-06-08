@@ -45,6 +45,14 @@ export class AuthService {
     }
   }
 
+  async isValidToken(token: string) {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
   async login(email: string, password: string) {
     const user = await this.prisma.users.findFirst({
       where: {
