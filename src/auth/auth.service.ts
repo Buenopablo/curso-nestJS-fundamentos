@@ -47,9 +47,10 @@ export class AuthService {
 
   async isValidToken(token: string) {
     try {
-      
+      this.checkToken(token);
+      return true;
     } catch (error) {
-      
+      return false;
     }
   }
 
