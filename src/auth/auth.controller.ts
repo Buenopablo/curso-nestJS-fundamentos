@@ -2,6 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   UploadedFile,
   UploadedFiles,
@@ -60,7 +63,22 @@ export class AuthController {
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(AuthGuard)
   @Post('photo')
-  async uploadPhoto(@User() user, @UploadedFile() photo) {
+  async uploadPhoto(
+    @User() user,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({
+            fileType: 'image/png',
+          }),
+          new MaxFileSizeValidator({
+            maxSize: 1024 * 50,
+          }),
+        ],
+      }),
+    )
+    photo,
+  ) {
     const path = join(
       __dirname,
       '../',
