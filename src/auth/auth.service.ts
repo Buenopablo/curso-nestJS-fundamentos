@@ -5,12 +5,13 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRegisterDTO } from './dto/auth-register.dto ';
-import { UserService } from 'src/user/user.service';
+
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer/dist';
-import { UserEntity } from 'src/user/entity/use.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserService } from '../user/user.service';
+import { UserEntity } from '../user/entity/use.entity';
 
 @Injectable()
 export class AuthService {
@@ -62,10 +63,8 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    const user = await this.usersRepository.findOne({
-      where: {
-        email,
-      },
+    const user = await this.usersRepository.findOneBy({
+      email,
     });
 
     if (!user) {
