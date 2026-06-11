@@ -19,7 +19,7 @@ export class UserService {
   ) {}
 
   async create(data: CreateUserDTO) {
-    const userExists = await this.usersRepository.findOne({
+    const userExists = await this.usersRepository.exist({
       where: { email: data.email },
     });
 
@@ -67,7 +67,6 @@ export class UserService {
     { email, name, password, birthAt, role }: UpdatePatchUserDTO,
   ) {
     await this.exists(id);
-    password = await bcrypt.hash(password, await bcrypt.genSalt());
     const data: any = {};
 
     if (birthAt) {
@@ -81,6 +80,7 @@ export class UserService {
     }
 
     if (password) {
+      password = await bcrypt.hash(password, await bcrypt.genSalt());
       data.password = password;
     }
 
@@ -95,7 +95,9 @@ export class UserService {
 
   async delete(id: number) {
     await this.exists(id);
-    return this.usersRepository.delete(id);
+    await this.usersRepository.delete(id);
+
+    return true;
   }
 
   async exists(id: number) {
