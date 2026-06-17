@@ -12,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/entity/use.entity';
+import { Role } from '../enums/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -135,7 +136,7 @@ export class AuthService {
   }
 
   async register(data: AuthRegisterDTO) {
-    const user = await this.userService.create(data);
+    const user = await this.userService.create({ ...data, role: Role.User });
 
     return this.createToken(user);
   }
